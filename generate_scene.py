@@ -12,6 +12,7 @@ from scene import Scene, parse_scene
 
 INSTRUCTIONS = """Create one fixed-camera pixel-art game scene from the user's prompt.
 Return a JSON object with these fields:
+- "version": 2.
 - "title": printable ASCII English, up to 60 characters.
 - "intro": opening narration or dialogue, printable ASCII English up to 240 characters.
 - "palette": 1-32 named six-digit RGB hex colors, for example {"ink":"141624"}.
@@ -23,17 +24,21 @@ Return a JSON object with these fields:
 The canvas is 144 pixels wide and 80 high, with origin (0, 0) at top left.
 Shape syntax: ["rect","ink",x,y,width,height] or
 ["poly","ink",[x1,y1],[x2,y2],[x3,y3],...]. Use integer coordinates, positive
-rectangle sizes and 3-12 polygon vertices. Shapes must fit entirely inside
-the canvas. Object art uses absolute coordinates and must fit inside its bounds.
-Objects render in array order over the background. Use distinct, legible silhouettes,
-layered backgrounds, shadows, highlights and small details. Fill the canvas.
-Give objects specific actions the player can take and a visible place in the scene.
+rectangle sizes and 3-12 polygon vertices. Background shapes and object bounds
+use canvas coordinates. Plan distinct object rectangles first and leave space
+between them. Inside each "art" list, (0, 0) is the top-left of that object's bounds.
+For example, in bounds [60, 20, 15, 18], local [2, 3] lands at scene [62, 23].
+Draw interactive objects only in their own art, and keep the static background
+behind them. Give each object a recognizable silhouette and a specific action.
 
-An object may include "after" with 1-24 additional shapes inside its own bounds,
-drawn permanently after successful interaction. Use it to show a clear change.
-An object may require another object's successful interaction, with "requires"
-set to that object's exact name and "blocked" giving a clue (up to 240 characters).
-Avoid cycles. Include a simple cause-and-effect interaction when it fits the prompt.
+An object may include "active_art" with 1-24 local shapes to replace its entire
+sprite after success. Draw a complete sprite in that same rectangle, keeping
+stationary parts in place. Unpainted pixels reveal the background automatically.
+Leave the surrounding area unpainted, including where a moving part used to be.
+Use "text" for the first successful action and "revisit" (up to 240 characters)
+to describe the resulting state on repeat presses. A read-only object may omit it.
+Use "requires" with the exact name of a prerequisite object, and "blocked"
+(up to 240 characters) for dialogue before that prerequisite is used. Avoid cycles.
 """
 
 
@@ -57,6 +62,8 @@ def generate_scene(
         content = complete(model, messages)
         try:
             data = json.loads(content)
+            if not isinstance(data, dict) or data.get("version") != 2:
+                raise ValueError("generate a version 2 scene with object-local art coordinates")
             return parse_scene(data), data
         except ValueError as error:
             if attempt == 1:

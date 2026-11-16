@@ -40,7 +40,9 @@ The [greenhouse example](examples/greenhouse.json) shows the full format. A scen
 - `["rect", "color", x, y, width, height]` draws a filled rectangle.
 - `["poly", "color", [x1,y1], [x2,y2], [x3,y3], ...]` draws a filled polygon.
 
-Each object has a unique name, a bounding rectangle `[x, y, width, height]`, an `art` list within that rectangle, and `text` for a successful interaction. Optional `after` shapes appear on success. Optional `requires` names another object that must have been used first, and `blocked` provides the clue shown when that requirement is unmet. Coordinates are absolute, with the origin at the top left. Use printable ASCII for in-game text.
+New scenes use `"version": 2`. Background coordinates and object bounds are relative to the canvas. Each object has one non-overlapping rectangle `[x, y, width, height]`. Both its initial `art` and optional `active_art` use coordinates relative to the top-left of that rectangle. On success, the active sprite replaces the initial sprite at the same location. Blank pixels reveal the background.
+
+An object can name a `requires` prerequisite and describe the locked state in `blocked`. On success it shows `text`. Subsequent presses show `revisit` when provided, so a one-time action can describe the resulting state. Use printable ASCII for in-game text. Saved version 1 scenes still load with their original absolute art coordinates and overlay format.
 
 ## Renderer API
 

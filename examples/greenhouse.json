@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "title": "The Moonlit Greenhouse",
   "intro": "The last train is gone. Moonlight falls across a locked greenhouse gate. A brass lantern sits on the old potting table.",
   "palette": {
@@ -51,36 +52,43 @@
       "name": "Brass lantern",
       "bounds": [25, 36, 20, 22],
       "art": [
-        ["rect", "wood", 33, 38, 6, 3],
-        ["rect", "brass", 30, 41, 12, 2],
-        ["rect", "ink", 31, 43, 10, 10],
-        ["rect", "wood", 32, 44, 8, 8],
-        ["rect", "metal", 34, 45, 4, 6],
-        ["rect", "brass", 30, 53, 12, 3]
+        ["rect", "wood", 8, 2, 6, 3],
+        ["rect", "brass", 5, 5, 12, 2],
+        ["rect", "ink", 6, 7, 10, 10],
+        ["rect", "wood", 7, 8, 8, 8],
+        ["rect", "metal", 9, 9, 4, 6],
+        ["rect", "brass", 5, 17, 12, 3]
       ],
       "text": "You light the lantern. Its glow reveals a brass key tucked under the frame. You take the key.",
-      "after": [
-        ["rect", "brass", 31, 45, 10, 6],
-        ["rect", "amber", 33, 44, 6, 8],
-        ["rect", "flame", 35, 46, 2, 4],
-        ["rect", "amber", 27, 48, 2, 1],
-        ["rect", "amber", 43, 48, 2, 1],
-        ["rect", "brass", 29, 56, 14, 1]
-      ]
+      "active_art": [
+        ["rect", "wood", 8, 2, 6, 3],
+        ["rect", "brass", 5, 5, 12, 2],
+        ["rect", "ink", 6, 7, 10, 10],
+        ["rect", "wood", 7, 8, 8, 8],
+        ["rect", "metal", 9, 9, 4, 6],
+        ["rect", "brass", 5, 17, 12, 3],
+        ["rect", "brass", 6, 9, 10, 6],
+        ["rect", "amber", 8, 8, 6, 8],
+        ["rect", "flame", 10, 10, 2, 4],
+        ["rect", "amber", 2, 12, 2, 1],
+        ["rect", "amber", 18, 12, 2, 1],
+        ["rect", "brass", 4, 20, 14, 1]
+      ],
+      "revisit": "The lantern is burning. You already have the brass key."
     },
     {
       "name": "Seed tray",
       "bounds": [54, 52, 25, 18],
       "art": [
-        ["poly", "wood", [58, 57], [76, 57], [78, 66], [56, 66]],
-        ["rect", "ink", 59, 59, 16, 5],
-        ["rect", "lightwood", 57, 66, 21, 2],
-        ["rect", "fern", 61, 55, 2, 7],
-        ["rect", "fern", 66, 54, 2, 8],
-        ["rect", "fern", 71, 56, 2, 6],
-        ["rect", "tip", 59, 55, 4, 1],
-        ["rect", "tip", 66, 54, 4, 1],
-        ["rect", "tip", 71, 56, 4, 1]
+        ["poly", "wood", [4, 5], [22, 5], [24, 14], [2, 14]],
+        ["rect", "ink", 5, 7, 16, 5],
+        ["rect", "lightwood", 3, 14, 21, 2],
+        ["rect", "fern", 7, 3, 2, 7],
+        ["rect", "fern", 12, 2, 2, 8],
+        ["rect", "fern", 17, 4, 2, 6],
+        ["rect", "tip", 5, 3, 4, 1],
+        ["rect", "tip", 12, 2, 4, 1],
+        ["rect", "tip", 17, 4, 4, 1]
       ],
       "text": "The seed labels read night phlox, evening primrose, and moonflower. Someone was planning a garden for after dark."
     },
@@ -88,23 +96,31 @@
       "name": "Iron gate",
       "bounds": [98, 26, 30, 37],
       "art": [
-        ["poly", "edge", [101, 59], [101, 35], [107, 28], [119, 28], [126, 35], [126, 59]],
-        ["poly", "ink", [104, 59], [104, 36], [109, 31], [118, 31], [123, 36], [123, 59]],
-        ["rect", "metal", 108, 34, 1, 24],
-        ["rect", "metal", 113, 31, 1, 27],
-        ["rect", "metal", 118, 34, 1, 24],
-        ["rect", "edge", 103, 48, 21, 2],
-        ["rect", "brass", 118, 47, 3, 4]
+        ["poly", "edge", [3, 33], [3, 9], [9, 2], [21, 2], [28, 9], [28, 33]],
+        ["poly", "ink", [6, 33], [6, 10], [11, 5], [20, 5], [25, 10], [25, 33]],
+        ["rect", "metal", 10, 8, 1, 24],
+        ["rect", "metal", 15, 5, 1, 27],
+        ["rect", "metal", 20, 8, 1, 24],
+        ["rect", "edge", 5, 22, 21, 2],
+        ["rect", "brass", 20, 21, 3, 4]
       ],
       "requires": "Brass lantern",
       "blocked": "A small brass lock holds the iron gate shut. There might be a key on the potting table.",
       "text": "The key turns. The gate swings inward, and the scent of damp earth drifts out.",
-      "after": [
-        ["poly", "mist", [104, 58], [104, 37], [109, 32], [118, 32], [123, 37], [123, 58]],
-        ["poly", "path", [105, 58], [112, 44], [115, 44], [121, 58]],
-        ["poly", "metal", [120, 36], [125, 39], [125, 55], [120, 58]],
-        ["rect", "brass", 121, 47, 2, 2]
-      ]
+      "active_art": [
+        ["poly", "edge", [3, 33], [3, 9], [9, 2], [21, 2], [28, 9], [28, 33]],
+        ["poly", "ink", [6, 33], [6, 10], [11, 5], [20, 5], [25, 10], [25, 33]],
+        ["rect", "metal", 10, 8, 1, 24],
+        ["rect", "metal", 15, 5, 1, 27],
+        ["rect", "metal", 20, 8, 1, 24],
+        ["rect", "edge", 5, 22, 21, 2],
+        ["rect", "brass", 20, 21, 3, 4],
+        ["poly", "mist", [6, 32], [6, 11], [11, 6], [20, 6], [25, 11], [25, 32]],
+        ["poly", "path", [7, 32], [14, 18], [17, 18], [23, 32]],
+        ["poly", "metal", [22, 10], [27, 13], [27, 29], [22, 32]],
+        ["rect", "brass", 23, 21, 2, 2]
+      ],
+      "revisit": "The iron gate is open."
     }
   ]
 }

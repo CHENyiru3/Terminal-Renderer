@@ -3,6 +3,7 @@
 import argparse
 from contextlib import contextmanager
 import json
+from math import ceil
 import os
 from pathlib import Path
 import select
@@ -72,6 +73,30 @@ def fit_frame(pixels: list[list[RGB]], columns: int, rows: int) -> list[list[RGB
     ]
 
 
+def scene_frame(state: PlayState, columns: int, rows: int, phase: int) -> list[list[RGB]]:
+    pixels = state.pixels(phase)
+    frame = fit_frame(pixels, columns, rows)
+    if state.selected is None:
+        return frame
+
+    x, y, width, height = state.scene.targets[state.selected].bounds
+    source_width, source_height = len(pixels[0]), len(pixels)
+    frame_width, frame_height = len(frame[0]), len(frame)
+    left = x * frame_width // source_width
+    top = y * frame_height // source_height
+    right = ceil((x + width) * frame_width / source_width) - 1
+    bottom = ceil((y + height) * frame_height / source_height) - 1
+    color = (255, 232, 164)
+    for col, dx in ((left, 1), (right, -1)):
+        for row, dy in ((top, 1), (bottom, -1)):
+            frame[row][col] = color
+            for step in range(1, min(3, right - left + 1)):
+                frame[row][col + dx * step] = color
+            for step in range(1, min(3, bottom - top + 1)):
+                frame[row + dy * step][col] = color
+    return frame
+
+
 def draw(state: PlayState, size: os.terminal_size, phase: int, resized: bool) -> None:
     columns = max(0, size.columns - 1)
     controls = "   ".join(
@@ -85,13 +110,13 @@ def draw(state: PlayState, size: os.terminal_size, phase: int, resized: bool) ->
         control_lines = textwrap.wrap(controls, width=columns)
         messages = [state.scene.intro]
         for target in state.scene.targets:
-            messages.extend((target.text, target.blocked))
+            messages.extend((target.text, target.blocked, target.revisit))
         needed_rows = max(len(textwrap.wrap(text, width=columns)) for text in messages)
         dialogue_rows = min(needed_rows, 3, max(1, size.lines - len(control_lines) - 4))
         art_rows = size.lines - len(control_lines) - dialogue_rows - 2
         if art_rows >= 2:
             title = textwrap.shorten(state.scene.title, width=columns, placeholder="...")
-            art = encode_frame(fit_frame(state.pixels(phase), columns, art_rows))
+            art = encode_frame(scene_frame(state, columns, art_rows, phase))
             dialogue = textwrap.wrap(state.dialogue, width=columns, max_lines=dialogue_rows,
                                      placeholder="...")
             dialogue.extend([""] * (dialogue_rows - len(dialogue)))

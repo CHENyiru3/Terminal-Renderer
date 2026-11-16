@@ -6,7 +6,7 @@ from subprocess import CompletedProcess
 import unittest
 from unittest.mock import patch
 
-from demo import EXAMPLES
+from demo import EXAMPLES, scene_frame
 from generate_scene import generate_scene
 from scene import PlayState, parse_scene
 
@@ -20,18 +20,59 @@ class SceneTests(unittest.TestCase):
         scene = parse_scene(greenhouse())
         state = PlayState(scene)
         self.assertEqual(state.dialogue, scene.intro)
+        idle = state.pixels(0)
         state.interact(2)
         self.assertIn("holds the iron gate shut", state.dialogue)
-        self.assertEqual(state.pixels(0)[26][98], (255, 232, 164))
-        self.assertEqual(state.pixels(0)[47][118], scene.background[47][118])
+        self.assertEqual(state.pixels(0), idle)
+        self.assertEqual(scene_frame(state, 144, 40, 0)[26][98], (255, 232, 164))
+        self.assertEqual(scene_frame(state, 36, 10, 0)[6][24], (255, 232, 164))
         state.interact(0)
         self.assertIn("You take the key", state.dialogue)
         self.assertEqual(state.pixels(0)[46][35], (255, 237, 176))
         state.interact(2)
         self.assertIn("The gate swings inward", state.dialogue)
-        self.assertNotEqual(state.pixels(0)[47][118], scene.background[47][118])
-        self.assertEqual(state.pixels(0)[46][35], (255, 237, 176))
-        self.assertEqual(PlayState(scene).pixels(0)[46][35], scene.background[46][35])
+        opened = state.pixels(0)
+        self.assertNotEqual(opened[47][118], idle[47][118])
+        self.assertEqual(opened[46][35], (255, 237, 176))
+        state.interact(2)
+        self.assertEqual(state.dialogue, "The iron gate is open.")
+        self.assertEqual(state.pixels(0), opened)
+        state.interact(0)
+        self.assertIn("already have", state.dialogue)
+        self.assertEqual(state.pixels(0), opened)
+        self.assertEqual(PlayState(scene).pixels(0), idle)
+
+    def test_active_art_replaces_old_sprite_in_the_same_bounds(self):
+        data = greenhouse()
+        lantern = data["objects"][0]
+        lantern["art"] = [["rect", "flame", 3, 4, 2, 2]]
+        lantern["active_art"] = [["rect", "flame", 8, 4, 2, 2]]
+        scene = parse_scene(data)
+        state = PlayState(scene)
+        idle = state.pixels(0)
+        self.assertEqual(idle[40][28], (255, 237, 176))
+        state.interact(0)
+        active = state.pixels(0)
+        self.assertEqual(active[40][28], scene.background[40][28])
+        self.assertEqual(active[40][33], (255, 237, 176))
+        self.assertEqual(scene_frame(state, 144, 40, 0)[36][25], (255, 232, 164))
+
+    def test_version_one_still_plays_absolute_art_and_overlays(self):
+        state = PlayState(parse_scene({
+            "title": "Example", "intro": "An old scene.",
+            "palette": {"dark": "101010", "light": "ffffff"},
+            "background": [["rect", "dark", 0, 0, 144, 80]],
+            "objects": [{
+                "name": "Lamp", "bounds": [10, 20, 6, 6], "text": "You light the lamp.",
+                "art": [["rect", "light", 11, 22, 2, 2]],
+                "after": [["rect", "light", 14, 24, 1, 1]],
+            }],
+        }))
+        self.assertEqual(state.pixels(0)[22][11], (255, 255, 255))
+        self.assertEqual(state.pixels(0)[24][14], (16, 16, 16))
+        state.interact(0)
+        self.assertEqual(state.pixels(0)[22][11], (255, 255, 255))
+        self.assertEqual(state.pixels(0)[24][14], (255, 255, 255))
 
     def test_polygons_fill_within_their_outline(self):
         scene = parse_scene(greenhouse())
@@ -41,7 +82,9 @@ class SceneTests(unittest.TestCase):
     def test_rejects_bad_targets(self):
         for field, value, message in (
             ("bounds", [140, 70, 20, 20], "drawing bounds"),
-            ("art", [["rect", "moon", 0, 0, 2, 2]], "drawing bounds"),
+            ("bounds", [48, 26, 30, 37], "overlap"),
+            ("art", [["rect", "moon", 98, 26, 2, 2]], "drawing bounds"),
+            ("active_art", [["rect", "moon", 29, 36, 2, 2]], "drawing bounds"),
             ("requires", "Missing object", "unknown prerequisite"),
             ("requires", "Iron gate", "cyclic"),
             ("name", "Seed tray", "unique"),
@@ -62,7 +105,7 @@ class SceneTests(unittest.TestCase):
             payload = {"choices": [{"message": {"content": json.dumps(scene_json)}}]}
             return io.BytesIO(json.dumps(payload).encode())
 
-        request.side_effect = [model_response({}), model_response(data)]
+        request.side_effect = [model_response({"version": 1}), model_response(data)]
         prompt = "A moonlit greenhouse with a locked gate."
         scene, returned_data = generate_scene(prompt, model="scene-model")
         self.assertEqual(scene.title, data["title"])
@@ -74,8 +117,8 @@ class SceneTests(unittest.TestCase):
         self.assertEqual(body["messages"][1], {"role": "user", "content": prompt})
         self.assertEqual(body["response_format"], {"type": "json_object"})
         self.assertEqual(body["model"], "scene-model")
-        self.assertIn("Fix this validation error", json.loads(second.data)["messages"][-1]["content"])
-
+        feedback = json.loads(second.data)["messages"][-1]["content"]
+        self.assertIn("version 2 scene with object-local art coordinates", feedback)
 
     @patch.dict(os.environ, {}, clear=True)
     @patch("generate_scene.subprocess.run")
