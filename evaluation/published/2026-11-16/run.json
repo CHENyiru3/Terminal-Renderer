@@ -1,0 +1,93 @@
+{
+  "utc_start": "2026-11-16T14:19:32.580422+00:00",
+  "cli_version": "codex-cli 0.167.1",
+  "models": [
+    "gpt-6.1-sol",
+    "gpt-6-astra",
+    "gpt-6.1-terra",
+    "gpt-6-sol",
+    "gpt-6-luna",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna"
+  ],
+  "cases": [
+    "forest",
+    "house",
+    "map",
+    "elf",
+    "starry-night"
+  ],
+  "trials": 1,
+  "seed": 20261116,
+  "jobs": 40,
+  "reasoning_effort": "medium",
+  "service_tier": "CLI default with user config disabled",
+  "repair_invalid": false,
+  "timeout_seconds": 180,
+  "api_rates": {
+    "as_of": "2026-11-16",
+    "currency": "USD",
+    "unit": "per million text tokens",
+    "tier": "standard, short context",
+    "models": {
+      "gpt-6.1-sol": {
+        "input": 2,
+        "cached_input": 0.1,
+        "output": 10,
+        "source": "https://developers.openai.com/api/docs/models/gpt-6.1-sol"
+      },
+      "gpt-6-astra": {
+        "input": 10,
+        "cached_input": 1,
+        "output": 50,
+        "source": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+      },
+      "gpt-6.1-terra": {
+        "input": 1,
+        "cached_input": 0.05,
+        "output": 5,
+        "source": "https://developers.openai.com/api/docs/models/gpt-6.1-terra"
+      },
+      "gpt-6-sol": {
+        "input": 2,
+        "cached_input": 0.2,
+        "output": 10,
+        "source": "https://developers.openai.com/api/docs/models/gpt-6-sol"
+      },
+      "gpt-6-luna": {
+        "input": 0.1,
+        "cached_input": 0.01,
+        "output": 0.5,
+        "source": "https://developers.openai.com/api/docs/models/gpt-6-luna"
+      },
+      "gpt-5.6-sol": {
+        "input": 4,
+        "cached_input": 0.4,
+        "output": 20,
+        "source": "https://developers.openai.com/api/docs/models/gpt-5.6-sol"
+      },
+      "gpt-5.6-terra": {
+        "input": 2,
+        "cached_input": 0.2,
+        "output": 12,
+        "source": "https://developers.openai.com/api/docs/models/gpt-5.6-terra"
+      },
+      "gpt-5.6-luna": {
+        "input": 0.2,
+        "cached_input": 0.02,
+        "output": 1.2,
+        "source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
+      }
+    }
+  },
+  "source_hashes": {
+    "evaluation/run.py": "bd5b61735113c73a4cbf4f7e7ade804275d2bf885827152718d3886bd18b5de3",
+    "evaluation/prompts.md": "7eb9f0023d0c5961098c7e999d775138d137f56ec2304f2384d399dd4e802a5b",
+    "evaluation/api-rates.json": "8b9fd3154f48527ea642e3f453ff3e8338aac91861975cd2e45cba3b57beb1fb",
+    "generate_scene.py": "ef4237efa05277dea0286d1ef587c76a466af6b769b65010e39d6e013e683eac",
+    "scene.py": "2ff772f2a8fd843149de3299b2903f18e387b7b452e40e671f472fa88f0e054c",
+    "demo.py": "901a3c2009e2e4e3283243d4ac2c0afb7caa357b6b82da52d6527bedd2c67152",
+    "terminal_renderer.py": "8199934f823fbad15fb7aff8efab86a1c37a6939df014ad8815f354ebb922f17"
+  }
+}

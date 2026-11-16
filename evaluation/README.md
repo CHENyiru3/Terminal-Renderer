@@ -1,6 +1,6 @@
 # Evaluation
 
-How reliably can GPT models turn a text prompt into a playable terminal scene? How much time and usage does each output take? The same renderer, scene format, and test prompts are used across models. The [five draft prompts](prompts.md) are divided into three interactive cases and two visual-fidelity cases.
+How reliably can GPT models turn a text prompt into a playable terminal scene? How much time and usage does each output take? The same renderer, scene format, and test prompts are used across models. The [five benchmark prompts](prompts.md) are divided into three interactive cases and two visual-fidelity cases.
 
 | Case | What it tests | What to show in the blog |
 | --- | --- | --- |
@@ -9,6 +9,10 @@ How reliably can GPT models turn a text prompt into a playable terminal scene? H
 | Global World Map | Geographic recall and coastline accuracy at low resolution | Generated map beside a matching reference and a land-mask difference image |
 | The Elf Gatekeeper | Recognizable character, conditional dialogue, and a visible transition | Locked arch, lit brazier, and open passage |
 | The Starry Night | Recognition, composition, palette, and brushstroke-like structure in pixel art | Generated study beside the MoMA reference |
+
+## Published run
+
+The [16 November 2026 snapshot](published/2026-11-16/README.md) includes all 40 metrics rows, 17 replayable scenes, automated checks, and the HTML gallery. The snapshot uses the recorded outputs from that run.
 
 ## Run from a signed-in terminal
 
@@ -67,4 +71,4 @@ Calculate the optional API estimate as ((input − cached input) × input rate +
 
 Keep one directory per model, case, and trial. Save the exact request, raw responses, JSONL events, validation outcomes, timing and token records, and each successful scene JSON. Save a native 144 × 80 PNG and a consistently enlarged nearest-neighbor copy for the gallery. For interactive scenes, save the initial frame and the frame after each scripted key press. Include scores, notes, and failure reasons. The blog can show representative frames and link to the full gallery, including failed attempts and retry outcomes.
 
-The evaluation code and prompts are versioned here. Benchmark outputs are generated locally and can be published separately with the blog.
+Raw attempts and CLI logs are archived locally under `evaluation/results/`. The published snapshot contains the metrics, settings, and valid scene outputs.

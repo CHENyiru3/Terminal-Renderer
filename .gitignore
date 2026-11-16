@@ -3,3 +3,7 @@ __pycache__/
 .DS_Store
 
 evaluation/results/
+build/
+dist/
+*.egg-info/
+.venv/

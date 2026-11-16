@@ -8,7 +8,7 @@ import tempfile
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from scene import Scene, parse_scene
+from .scene import Scene, parse_scene
 
 INSTRUCTIONS = """Create one fixed-camera pixel-art game scene from the user's prompt.
 Return a JSON object with these fields:

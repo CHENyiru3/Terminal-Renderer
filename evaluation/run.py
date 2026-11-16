@@ -17,9 +17,9 @@ import tempfile
 from time import perf_counter
 import zlib
 
-from demo import scene_frame
-from generate_scene import codex_command, codex_environment, scene_response_text
-from scene import HEIGHT, WIDTH, PlayState, parse_scene
+from terminal_renderer.cli import scene_frame
+from terminal_renderer.generation import codex_command, codex_environment, scene_response_text
+from terminal_renderer.scene import HEIGHT, WIDTH, PlayState, parse_scene
 
 HERE = Path(__file__).resolve().parent
 MODELS = (
@@ -293,8 +293,8 @@ def main():
     prompts = read_prompts(HERE / "prompts.md")
     cli = subprocess.run(["codex", "--version"], capture_output=True, text=True, timeout=10)
     sources = (Path(__file__).resolve(), HERE / "prompts.md", HERE / "api-rates.json",
-               HERE.parent / "generate_scene.py", HERE.parent / "scene.py", HERE.parent / "demo.py",
-               HERE.parent / "terminal_renderer.py")
+               *(HERE.parent / "terminal_renderer" / name for name in
+                 ("__init__.py", "cli.py", "generation.py", "scene.py")))
     write_json(root / "run.json", {
         "utc_start": started.isoformat(), "cli_version": cli.stdout.strip(),
         "models": models, "cases": cases, "trials": args.trials, "seed": args.seed,
@@ -337,7 +337,8 @@ def main():
                     rows.append(row)
                     print(
                         f"  {row['model']} · {row['case']} · "
-                        f"{row['final_status']} in {row['total_seconds']:.3f}s",
+                        f"{row['final_status']} in {row['total_seconds']:.3f}s"
+                        + (f" · {row['error']}" if row["error"] else ""),
                         flush=True,
                     )
         except KeyboardInterrupt:

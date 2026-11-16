@@ -1,7 +1,7 @@
 import re
 import unittest
 
-from demo import fit_frame, tavern
+from terminal_renderer.cli import fit_frame, tavern
 from terminal_renderer import RESET, encode_frame
 
 SGR = re.compile(r"\x1b\[[0-9;]*m")

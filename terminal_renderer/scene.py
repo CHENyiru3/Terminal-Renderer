@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 from typing import TypeAlias
 
-from terminal_renderer import RGB
+from . import RGB
 
 WIDTH, HEIGHT = 144, 80
 Bounds: TypeAlias = tuple[int, int, int, int]
@@ -213,36 +213,41 @@ def _rect(value: object, bounds: Bounds, label: str) -> Bounds:
 
 def _shapes(value: object, palette: dict[str, RGB], bounds: Bounds,
             label: str, maximum: int) -> tuple[Span, ...]:
-    if not isinstance(value, list) or not 1 <= len(value) <= maximum:
-        raise ValueError(f"{label} must contain 1 to {maximum} shapes")
+    if not isinstance(value, list):
+        raise ValueError(f"{label} must be an array of shapes")
+    if not 1 <= len(value) <= maximum:
+        raise ValueError(f"{label} has {len(value)} shapes. Expected 1 to {maximum}")
     spans = []
-    for shape in value:
-        if (
-            not isinstance(shape, list) or len(shape) < 3
-            or not isinstance(shape[1], str) or shape[1] not in palette
-        ):
-            raise ValueError(f"{label} contains a malformed shape or unknown color")
+    for index, shape in enumerate(value, start=1):
+        item = f"{label} shape {index}"
+        if not isinstance(shape, list) or len(shape) < 3:
+            raise ValueError(f"{item} must be an array with a type, color, and coordinates")
         kind, name, *coordinates = shape
+        if not isinstance(name, str) or name not in palette:
+            raise ValueError(f"{item} names an undeclared palette color: {name!r}")
         color = palette[name]
         if kind == "rect":
-            x, y, width, height = _rect(coordinates, bounds, label)
+            x, y, width, height = _rect(coordinates, bounds, item)
             spans.extend((row, x, x + width, color) for row in range(y, y + height))
         elif kind == "poly":
-            spans.extend(_polygon(coordinates, bounds, color, label))
+            spans.extend(_polygon(coordinates, bounds, color, item))
         else:
-            raise ValueError(f"{label} shape type must be rect or poly")
+            raise ValueError(f"{item} type must be rect or poly")
     return tuple(spans)
 
 
 def _polygon(points: list, bounds: Bounds, color: RGB, label: str) -> list[Span]:
-    left, top, width, height = bounds
-    if not 3 <= len(points) <= 12 or any(
+    if any(
         not isinstance(point, list) or len(point) != 2
         or any(type(coordinate) is not int for coordinate in point)
-        or not (left <= point[0] <= left + width and top <= point[1] <= top + height)
         for point in points
     ):
-        raise ValueError(f"{label} polygon must have 3 to 12 points within its drawing bounds")
+        raise ValueError(f"{label} polygon vertices must be [x, y] integer pairs")
+    if not 3 <= len(points) <= 12:
+        raise ValueError(f"{label} polygon has {len(points)} vertices. Expected 3 to 12")
+    left, top, width, height = bounds
+    if any(not (left <= x <= left + width and top <= y <= top + height) for x, y in points):
+        raise ValueError(f"{label} polygon vertices must be within its drawing bounds")
     edges = list(zip(points, points[1:] + points[:1]))
     spans = []
     for y in range(min(point[1] for point in points), max(point[1] for point in points)):

@@ -6,9 +6,9 @@ from subprocess import CompletedProcess
 import unittest
 from unittest.mock import patch
 
-from demo import EXAMPLES, scene_frame
-from generate_scene import generate_scene
-from scene import PlayState, parse_scene
+from terminal_renderer.cli import EXAMPLES, scene_frame
+from terminal_renderer.generation import generate_scene
+from terminal_renderer.scene import PlayState, parse_scene
 
 
 def greenhouse():
@@ -97,7 +97,7 @@ class SceneTests(unittest.TestCase):
                     parse_scene(data)
 
     @patch.dict(os.environ, {"OPENAI_API_KEY": "example", "OPENAI_BASE_URL": "https://example.test/v1"})
-    @patch("generate_scene.urlopen")
+    @patch("terminal_renderer.generation.urlopen")
     def test_generation_passes_prompt_and_repairs_invalid_output(self, request):
         data = greenhouse()
 
@@ -121,7 +121,7 @@ class SceneTests(unittest.TestCase):
         self.assertIn("version 2 scene with object-local art coordinates", feedback)
 
     @patch.dict(os.environ, {}, clear=True)
-    @patch("generate_scene.subprocess.run")
+    @patch("terminal_renderer.generation.subprocess.run")
     def test_codex_is_default_without_api_settings(self, run):
         data = greenhouse()
 
@@ -142,7 +142,7 @@ class SceneTests(unittest.TestCase):
         self.assertEqual(returned_data, data)
 
     @patch.dict(os.environ, {"OPENAI_API_KEY": "api-test", "OPENAI_BASE_URL": "https://api.test/v1"})
-    @patch("generate_scene.subprocess.run")
+    @patch("terminal_renderer.generation.subprocess.run")
     def test_codex_provider_uses_cli_even_with_api_settings(self, run):
         run.return_value = CompletedProcess(
             ["codex"], 1, stdout="", stderr="Error: sign in with codex login",
