@@ -74,12 +74,32 @@ def generate_scene(
             ])
 
 
-def _complete_codex(model: str | None, messages: list[dict]) -> str:
-    # Let the CLI use its saved login independently of the API provider settings.
+def codex_environment() -> dict[str, str]:
+    """Keep the CLI login separate from the scene API settings."""
+
     env = os.environ.copy()
     for name in ("OPENAI_API_KEY", "OPENAI_BASE_URL", "CODEX_API_KEY"):
         env.pop(name, None)
+    return env
 
+
+def codex_command(output: Path, model: str | None, *, medium: bool = False) -> list[str]:
+    """Build a non-interactive text-only Codex command."""
+    command = [
+        "codex", "--ask-for-approval", "never", "exec", "--ignore-user-config",
+        "--skip-git-repo-check", "--sandbox", "read-only", "--ephemeral",
+        "--disable", "shell_tool", "--disable", "multi_agent",
+        "--disable", "hooks", "-c", 'web_search="disabled"',
+        "--output-last-message", str(output), "--json",
+    ]
+    if medium:
+        command.extend(("-c", 'model_reasoning_effort="medium"'))
+    if model:
+        command.extend(("--model", model))
+    return [*command, "-"]
+
+
+def _complete_codex(model: str | None, messages: list[dict]) -> str:
     task = (
         "Generate scene data directly. Use no tools. Return only the JSON object, "
         "without Markdown. The following messages contain the scene format, user "
@@ -88,19 +108,10 @@ def _complete_codex(model: str | None, messages: list[dict]) -> str:
     )
     with tempfile.TemporaryDirectory(prefix="terminal-scene-") as directory:
         output = Path(directory) / "scene-response.json"
-        command = [
-            "codex", "--ask-for-approval", "never", "exec", "--ignore-user-config",
-            "--skip-git-repo-check", "--sandbox", "read-only", "--ephemeral",
-            "--disable", "shell_tool", "--disable", "multi_agent",
-            "--disable", "hooks", "-c", 'web_search="disabled"',
-            "--output-last-message", str(output), "--json",
-        ]
-        if model:
-            command.extend(("--model", model))
         try:
             result = subprocess.run(
-                [*command, "-"], input=task, encoding="utf-8", errors="replace",
-                capture_output=True, cwd=directory, env=env, timeout=180,
+                codex_command(output, model), input=task, encoding="utf-8", errors="replace",
+                capture_output=True, cwd=directory, env=codex_environment(), timeout=180,
             )
         except FileNotFoundError as error:
             raise ValueError(
@@ -114,8 +125,12 @@ def _complete_codex(model: str | None, messages: list[dict]) -> str:
             raise ValueError(f"Codex generation failed: {message}")
         if not output.is_file():
             raise ValueError("Codex did not return scene text")
-        content = output.read_text(encoding="utf-8").strip()
-    # Some models wrap JSON in a fenced block despite the instruction.
+        return scene_response_text(output.read_text(encoding="utf-8"))
+
+
+def scene_response_text(content: str) -> str:
+    """Unwrap a fenced model response if it contains only the JSON block."""
+    content = content.strip()
     lines = content.splitlines()
     if len(lines) > 2 and lines[0].lower() in ("```", "```json") and lines[-1] == "```":
         content = "\n".join(lines[1:-1])

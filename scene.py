@@ -90,7 +90,7 @@ def paint(pixels: list[list[RGB]], spans: tuple[Span, ...]) -> None:
         pixels[y][left:right] = [color] * (right - left)
 
 
-def parse_scene(data: object) -> Scene:
+def parse_scene(data: object, *, allow_static: bool = False) -> Scene:
     """Validate a scene JSON document and compile its shapes to RGB pixels."""
     if not isinstance(data, dict):
         raise ValueError("scene must be a JSON object")
@@ -108,8 +108,9 @@ def parse_scene(data: object) -> Scene:
     paint(pixels, _shapes(data.get("background"), palette, canvas, "background", 64))
 
     objects = data.get("objects")
-    if not isinstance(objects, list) or not 1 <= len(objects) <= 5:
-        raise ValueError("objects must contain 1 to 5 interactable objects")
+    minimum_objects = 0 if allow_static else 1
+    if not isinstance(objects, list) or not minimum_objects <= len(objects) <= 5:
+        raise ValueError(f"objects must contain {minimum_objects} to 5 interactable objects")
     targets = []
     for index, obj in enumerate(objects, start=1):
         label = f"object {index}"
