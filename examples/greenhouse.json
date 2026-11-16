@@ -1,0 +1,110 @@
+{
+  "title": "The Moonlit Greenhouse",
+  "intro": "The last train is gone. Moonlight falls across a locked greenhouse gate. A brass lantern sits on the old potting table.",
+  "palette": {
+    "ink": "111827", "sky": "1a2b49", "mist": "293f61",
+    "moon": "bed9d9", "halo": "68859b", "metal": "3b535f",
+    "edge": "56727b", "soil": "251f2c", "path": "383543",
+    "wood": "66504c", "lightwood": "947259",
+    "leaf": "263f42", "fern": "3b635a", "tip": "719477",
+    "brass": "ba9259", "amber": "f3be68", "flame": "ffedb0"
+  },
+  "background": [
+    ["rect", "ink", 0, 0, 144, 80],
+    ["poly", "sky", [5, 53], [5, 22], [30, 5], [114, 5], [139, 22], [139, 53]],
+    ["rect", "mist", 6, 34, 132, 17],
+    ["poly", "halo", [20, 14], [27, 10], [36, 11], [41, 16], [39, 23], [33, 26], [24, 25], [19, 20]],
+    ["poly", "moon", [24, 15], [29, 12], [35, 13], [38, 17], [36, 22], [29, 24], [23, 21], [22, 18]],
+    ["rect", "halo", 51, 14, 2, 1],
+    ["rect", "halo", 79, 20, 1, 1],
+    ["rect", "moon", 97, 14, 1, 1],
+    ["rect", "halo", 122, 26, 2, 1],
+    ["poly", "sky", [5, 49], [17, 36], [27, 42], [47, 32], [59, 43], [82, 34], [108, 45], [126, 36], [139, 46], [139, 53], [5, 53]],
+    ["rect", "metal", 5, 22, 134, 2],
+    ["rect", "metal", 5, 24, 2, 30],
+    ["rect", "metal", 137, 24, 2, 30],
+    ["rect", "metal", 46, 6, 2, 48],
+    ["rect", "metal", 96, 6, 2, 48],
+    ["rect", "metal", 30, 5, 84, 2],
+    ["poly", "metal", [5, 22], [30, 5], [32, 6], [8, 23]],
+    ["poly", "metal", [112, 5], [115, 5], [139, 22], [136, 23]],
+    ["rect", "edge", 7, 48, 130, 1],
+    ["rect", "metal", 7, 49, 130, 5],
+    ["rect", "soil", 0, 54, 144, 26],
+    ["poly", "path", [96, 54], [121, 54], [139, 80], [64, 80]],
+    ["rect", "ink", 86, 68, 29, 1],
+    ["rect", "ink", 108, 75, 21, 1],
+    ["rect", "path", 18, 68, 34, 2],
+    ["rect", "wood", 10, 58, 47, 4],
+    ["rect", "lightwood", 10, 57, 47, 1],
+    ["rect", "wood", 13, 62, 3, 11],
+    ["rect", "wood", 50, 62, 3, 11],
+    ["poly", "leaf", [0, 75], [0, 57], [6, 63], [5, 51], [16, 58], [20, 69], [23, 64], [28, 73], [25, 80], [0, 80]],
+    ["poly", "fern", [3, 58], [11, 61], [15, 70], [9, 67]],
+    ["poly", "fern", [7, 52], [14, 57], [18, 67], [13, 61]],
+    ["poly", "leaf", [121, 80], [119, 67], [126, 71], [126, 60], [132, 65], [138, 55], [144, 61], [144, 80]],
+    ["poly", "fern", [126, 61], [132, 66], [134, 74], [129, 71]],
+    ["poly", "fern", [138, 56], [142, 65], [136, 74], [136, 65]]
+  ],
+  "objects": [
+    {
+      "name": "Brass lantern",
+      "bounds": [25, 36, 20, 22],
+      "art": [
+        ["rect", "wood", 33, 38, 6, 3],
+        ["rect", "brass", 30, 41, 12, 2],
+        ["rect", "ink", 31, 43, 10, 10],
+        ["rect", "wood", 32, 44, 8, 8],
+        ["rect", "metal", 34, 45, 4, 6],
+        ["rect", "brass", 30, 53, 12, 3]
+      ],
+      "text": "You light the lantern. Its glow reveals a brass key tucked under the frame. You take the key.",
+      "after": [
+        ["rect", "brass", 31, 45, 10, 6],
+        ["rect", "amber", 33, 44, 6, 8],
+        ["rect", "flame", 35, 46, 2, 4],
+        ["rect", "amber", 27, 48, 2, 1],
+        ["rect", "amber", 43, 48, 2, 1],
+        ["rect", "brass", 29, 56, 14, 1]
+      ]
+    },
+    {
+      "name": "Seed tray",
+      "bounds": [54, 52, 25, 18],
+      "art": [
+        ["poly", "wood", [58, 57], [76, 57], [78, 66], [56, 66]],
+        ["rect", "ink", 59, 59, 16, 5],
+        ["rect", "lightwood", 57, 66, 21, 2],
+        ["rect", "fern", 61, 55, 2, 7],
+        ["rect", "fern", 66, 54, 2, 8],
+        ["rect", "fern", 71, 56, 2, 6],
+        ["rect", "tip", 59, 55, 4, 1],
+        ["rect", "tip", 66, 54, 4, 1],
+        ["rect", "tip", 71, 56, 4, 1]
+      ],
+      "text": "The seed labels read night phlox, evening primrose, and moonflower. Someone was planning a garden for after dark."
+    },
+    {
+      "name": "Iron gate",
+      "bounds": [98, 26, 30, 37],
+      "art": [
+        ["poly", "edge", [101, 59], [101, 35], [107, 28], [119, 28], [126, 35], [126, 59]],
+        ["poly", "ink", [104, 59], [104, 36], [109, 31], [118, 31], [123, 36], [123, 59]],
+        ["rect", "metal", 108, 34, 1, 24],
+        ["rect", "metal", 113, 31, 1, 27],
+        ["rect", "metal", 118, 34, 1, 24],
+        ["rect", "edge", 103, 48, 21, 2],
+        ["rect", "brass", 118, 47, 3, 4]
+      ],
+      "requires": "Brass lantern",
+      "blocked": "A small brass lock holds the iron gate shut. There might be a key on the potting table.",
+      "text": "The key turns. The gate swings inward, and the scent of damp earth drifts out.",
+      "after": [
+        ["poly", "mist", [104, 58], [104, 37], [109, 32], [118, 32], [123, 37], [123, 58]],
+        ["poly", "path", [105, 58], [112, 44], [115, 44], [121, 58]],
+        ["poly", "metal", [120, 36], [125, 39], [125, 55], [120, 58]],
+        ["rect", "brass", 121, 47, 2, 2]
+      ]
+    }
+  ]
+}
