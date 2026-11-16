@@ -14,13 +14,15 @@ In the included Lighthouse Tavern, press **1** to read the wet letter, **2** to 
 
 ## Generate a scene
 
-Set `OPENAI_API_KEY` in your shell, then run:
+Use a recent [Codex CLI](https://developers.openai.com/codex/cli) signed in with ChatGPT. Run `codex login status` to check your session, or `codex login` to sign in.
 
 ```sh
-python3 demo.py --prompt "A moonlit greenhouse. Light a brass lantern to find a key, inspect a seed tray, and use the key to unlock the iron gate." --save-scene greenhouse.json
+python3 demo.py --provider codex --prompt "A moonlit greenhouse. Light a brass lantern to find a key, inspect a seed tray, and use the key to unlock the iron gate." --save-scene greenhouse.json
 ```
 
-Generation runs once before play. The default model is `gpt-4.1-mini`. Override it with `--model` or `OPENAI_MODEL`, or set `OPENAI_BASE_URL` to a compatible API base URL (typically ending in `/v1`) that supports Chat Completions JSON mode.
+Generation runs before play. Codex CLI uses its own signed-in session. Choose a different Codex model with `--model`.
+
+Without `--provider`, the app uses Codex CLI when neither `OPENAI_API_KEY` nor `OPENAI_BASE_URL` is set. Use `--provider api` for an OpenAI-compatible endpoint that supports Chat Completions JSON mode. The API mode defaults to `gpt-4.1-mini` and also accepts `--model` or `OPENAI_MODEL`.
 
 Replay your saved scene or try the bundled greenhouse with no API key:
 

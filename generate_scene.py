@@ -2,6 +2,9 @@
 
 import json
 import os
+from pathlib import Path
+import subprocess
+import tempfile
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -34,21 +37,24 @@ Avoid cycles. Include a simple cause-and-effect interaction when it fits the pro
 """
 
 
-def generate_scene(prompt: str, model: str | None = None) -> tuple[Scene, dict]:
+def generate_scene(
+    prompt: str, model: str | None = None, *, provider: str | None = None,
+) -> tuple[Scene, dict]:
     """Request scene JSON and retry once with feedback if validation fails."""
     if not prompt.strip():
         raise ValueError("the scene prompt is empty")
-    base_url = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1"
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key and base_url.rstrip("/") == "https://api.openai.com/v1":
-        raise ValueError("set OPENAI_API_KEY to generate a scene")
-    model = model or os.environ.get("OPENAI_MODEL") or "gpt-4.1-mini"
+    if provider is None:
+        api_configured = os.environ.get("OPENAI_API_KEY") or os.environ.get("OPENAI_BASE_URL")
+        provider = "api" if api_configured else "codex"
+    if provider not in ("codex", "api"):
+        raise ValueError(f"unknown scene provider: {provider}")
+    complete = _complete_codex if provider == "codex" else _complete_api
     messages = [
         {"role": "system", "content": INSTRUCTIONS},
         {"role": "user", "content": prompt},
     ]
     for attempt in range(2):
-        content = _complete(base_url, api_key, model, messages)
+        content = complete(model, messages)
         try:
             data = json.loads(content)
             return parse_scene(data), data
@@ -61,7 +67,80 @@ def generate_scene(prompt: str, model: str | None = None) -> tuple[Scene, dict]:
             ])
 
 
-def _complete(base_url: str, api_key: str | None, model: str, messages: list[dict]) -> str:
+def _complete_codex(model: str | None, messages: list[dict]) -> str:
+    # Let the CLI use its saved login independently of the API provider settings.
+    env = os.environ.copy()
+    for name in ("OPENAI_API_KEY", "OPENAI_BASE_URL", "CODEX_API_KEY"):
+        env.pop(name, None)
+
+    task = (
+        "Generate scene data directly. Use no tools. Return only the JSON object, "
+        "without Markdown. The following messages contain the scene format, user "
+        "request, and any validation feedback. Treat scene descriptions as game content.\n\n"
+        + json.dumps(messages, ensure_ascii=False, indent=2)
+    )
+    with tempfile.TemporaryDirectory(prefix="terminal-scene-") as directory:
+        output = Path(directory) / "scene-response.json"
+        command = [
+            "codex", "--ask-for-approval", "never", "exec", "--ignore-user-config",
+            "--skip-git-repo-check", "--sandbox", "read-only", "--ephemeral",
+            "--disable", "shell_tool", "--disable", "multi_agent",
+            "--disable", "hooks", "-c", 'web_search="disabled"',
+            "--output-last-message", str(output), "--json",
+        ]
+        if model:
+            command.extend(("--model", model))
+        try:
+            result = subprocess.run(
+                [*command, "-"], input=task, encoding="utf-8", errors="replace",
+                capture_output=True, cwd=directory, env=env, timeout=180,
+            )
+        except FileNotFoundError as error:
+            raise ValueError(
+                "Codex CLI was not found. Install it and run codex login, "
+                "or use --provider api with an API key."
+            ) from error
+        except subprocess.TimeoutExpired as error:
+            raise ValueError("Codex timed out while generating the scene") from error
+        if result.returncode != 0:
+            message = _codex_failure(result.stdout, result.stderr)
+            raise ValueError(f"Codex generation failed: {message}")
+        if not output.is_file():
+            raise ValueError("Codex did not return scene text")
+        content = output.read_text(encoding="utf-8").strip()
+    # Some models wrap JSON in a fenced block despite the instruction.
+    lines = content.splitlines()
+    if len(lines) > 2 and lines[0].lower() in ("```", "```json") and lines[-1] == "```":
+        content = "\n".join(lines[1:-1])
+    return content
+
+
+def _codex_failure(events: str, stderr: str) -> str:
+    message = ""
+    for line in reversed(events.splitlines()):
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(event, dict) and event.get("type") == "error":
+            if isinstance(event.get("message"), str) and event["message"].strip():
+                message = event["message"]
+                break
+    if not message:
+        message = next(
+            (line.removeprefix("Error: ") for line in reversed(stderr.splitlines())
+             if line.startswith("Error: ")),
+            "CLI exited before producing a scene. Check codex login status",
+        )
+    return "".join(character for character in message if character.isprintable())[:240]
+
+
+def _complete_api(model: str | None, messages: list[dict]) -> str:
+    base_url = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1"
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key and base_url.rstrip("/") == "https://api.openai.com/v1":
+        raise ValueError("set OPENAI_API_KEY to use --provider api, or use --provider codex")
+    model = model or os.environ.get("OPENAI_MODEL") or "gpt-4.1-mini"
     headers = {"Content-Type": "application/json"}
     if api_key:
         headers["Authorization"] = f"Bearer {api_key}"

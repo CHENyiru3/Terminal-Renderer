@@ -140,11 +140,17 @@ def main() -> int:
     source = parser.add_mutually_exclusive_group()
     source.add_argument("--prompt", help="ask a text model to make a new scene")
     source.add_argument("--scene", type=Path, help="play a saved scene JSON file")
+    parser.add_argument(
+        "--provider", choices=("codex", "api"),
+        help="generation backend (default: API if configured, otherwise Codex CLI)",
+    )
     parser.add_argument("--model", help="override the scene generation model")
     parser.add_argument("--save-scene", type=Path, help="save generated scene JSON before play")
     args = parser.parse_args()
-    if args.prompt is None and (args.model is not None or args.save_scene is not None):
-        parser.error("--model and --save-scene require --prompt")
+    if args.prompt is None and any(
+        value is not None for value in (args.provider, args.model, args.save_scene)
+    ):
+        parser.error("--provider, --model, and --save-scene require --prompt")
     if not (sys.stdin.isatty() and sys.stdout.isatty()):
         parser.error("play requires a terminal on stdin and stdout")
 
@@ -153,7 +159,7 @@ def main() -> int:
             from generate_scene import generate_scene
 
             print("Generating scene...", file=sys.stderr, flush=True)
-            scene, data = generate_scene(args.prompt, args.model)
+            scene, data = generate_scene(args.prompt, args.model, provider=args.provider)
             if args.save_scene is not None:
                 args.save_scene.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         elif args.scene is not None:

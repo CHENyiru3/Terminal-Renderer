@@ -1,6 +1,8 @@
 import io
 import json
 import os
+from pathlib import Path
+from subprocess import CompletedProcess
 import unittest
 from unittest.mock import patch
 
@@ -73,3 +75,38 @@ class SceneTests(unittest.TestCase):
         self.assertEqual(body["response_format"], {"type": "json_object"})
         self.assertEqual(body["model"], "scene-model")
         self.assertIn("Fix this validation error", json.loads(second.data)["messages"][-1]["content"])
+
+
+    @patch.dict(os.environ, {}, clear=True)
+    @patch("generate_scene.subprocess.run")
+    def test_codex_is_default_without_api_settings(self, run):
+        data = greenhouse()
+
+        def codex(command, *, cwd, input, env, **_):
+            self.assertEqual(command[0], "codex")
+            self.assertIn("exec", command)
+            self.assertEqual(command[-1], "-")
+            self.assertIn("The moonlit greenhouse", input)
+            self.assertNotIn("OPENAI_API_KEY", env)
+            response = Path(command[command.index("--output-last-message") + 1])
+            self.assertEqual(response.parent, Path(cwd))
+            response.write_text("```json\n" + json.dumps(data) + "\n```", encoding="utf-8")
+            return CompletedProcess(command, 0, stdout="", stderr="")
+
+        run.side_effect = codex
+        scene, returned_data = generate_scene("The moonlit greenhouse")
+        self.assertEqual(scene.title, data["title"])
+        self.assertEqual(returned_data, data)
+
+    @patch.dict(os.environ, {"OPENAI_API_KEY": "api-test", "OPENAI_BASE_URL": "https://api.test/v1"})
+    @patch("generate_scene.subprocess.run")
+    def test_codex_provider_uses_cli_even_with_api_settings(self, run):
+        run.return_value = CompletedProcess(
+            ["codex"], 1, stdout="", stderr="Error: sign in with codex login",
+        )
+        with self.assertRaisesRegex(ValueError, "sign in with codex login"):
+            generate_scene("A greenhouse", model="codex-model", provider="codex")
+        args, options = run.call_args
+        self.assertEqual(args[0][-3:], ["--model", "codex-model", "-"])
+        self.assertNotIn("OPENAI_API_KEY", options["env"])
+        self.assertNotIn("OPENAI_BASE_URL", options["env"])
