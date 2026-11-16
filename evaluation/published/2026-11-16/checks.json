@@ -1,0 +1,780 @@
+{
+  "gpt-6.1-sol": {
+    "house": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog stays stretched out beside the sofa, watching you with one bright eye. The toy basket is still closed.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Cat",
+          "dialogue": "The cat straightens on the perch, closes its eyes, and begins a soft, steady purr.",
+          "art_changed": true,
+          "newly_used": [
+            "Cat"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Toy basket",
+          "dialogue": "You lift the lid and leave it propped open. A bright ball peeks out, and the dog's ears perk up.",
+          "art_changed": true,
+          "newly_used": [
+            "Toy basket"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog springs up into an eager play bow, front paws forward and tail raised. That ball has its full attention.",
+          "art_changed": true,
+          "newly_used": [
+            "Dog"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Cat",
+          "dialogue": "The cat sits upright in the warm window light, still purring.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        },
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog holds its eager play pose beside the sofa, ready for the ball.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ],
+      "cat_changes_art": true
+    },
+    "map": {
+      "uses_required_colors": true,
+      "land_iou": null
+    },
+    "elf": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "Dormant runes lie cold beneath your fingers. Violet mist seals the opening. Somewhere nearby, an unlit bowl waits.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Elf gatekeeper",
+          "dialogue": "The elf turns her pointed ear toward you. \"These stones remember moonfire. Wake the blue flame, then touch the runes.\"",
+          "art_changed": false,
+          "newly_used": [
+            "Elf gatekeeper"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Moonfire brazier",
+          "dialogue": "You kindle the bowl. Blue moonfire rises without smoke, washing the ancient stones in cold light.",
+          "art_changed": true,
+          "newly_used": [
+            "Moonfire brazier"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "Moonfire answers your touch. The runes shine, the mist parts, and an open passage appears between the unmoving stones.",
+          "art_changed": true,
+          "newly_used": [
+            "Rune arch"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Moonfire brazier",
+          "dialogue": "The brazier remains lit. Its blue flame bends toward the arch.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        },
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "The runes glow steadily. The arch stands open, revealing a dark path into the woodland beyond.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ]
+    },
+    "starry-night": {
+      "uniform_side_matte": true
+    }
+  },
+  "gpt-6-astra": {
+    "forest": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "White bear",
+          "dialogue": "Through the branches, you can make out a white shape, but its face is obscured. Open the lookout's viewing slit for a clear view.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Trail sign",
+          "dialogue": "The weathered sign reads: \"Open the lookout's viewing slit for a clear view of the white bear across the stream.\"",
+          "art_changed": false,
+          "newly_used": [
+            "Trail sign"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Lookout blind",
+          "dialogue": "You lift the wooden shutter. The dark viewing slit opens onto the stream and the bear beyond. The shutter stays propped open.",
+          "art_changed": true,
+          "newly_used": [
+            "Lookout blind"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "White bear",
+          "dialogue": "Through the open slit, you see the white bear lift its head. Its dark nose tilts into the dawn air while its paws remain planted beside the stream.",
+          "art_changed": true,
+          "newly_used": [
+            "White bear"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "White bear",
+          "dialogue": "The bear holds its head raised, ears upright and dark nose tipped toward the morning breeze. Its pale coat catches the warm light.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ]
+    },
+    "house": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog watches you from its resting spot, chin lifted and ears attentive. Open the toy basket to invite it to play.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Cat",
+          "dialogue": "The cat sits upright on the perch, closes its eyes, and purrs in the afternoon sun.",
+          "art_changed": true,
+          "newly_used": [
+            "Cat"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Toy basket",
+          "dialogue": "You lift the basket lid. A striped ball peeks out, and the lid stays propped open. The dog notices immediately.",
+          "art_changed": true,
+          "newly_used": [
+            "Toy basket"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog springs to its feet, tail raised and front paws braced eagerly. It is ready to play!",
+          "art_changed": true,
+          "newly_used": [
+            "Dog"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Cat",
+          "dialogue": "The cat remains upright on its perch, eyes softly closed and purring contentedly.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        },
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog remains standing in an eager play pose, tail up and eyes fixed on the open toy basket.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ],
+      "cat_changes_art": true
+    },
+    "map": {
+      "uses_required_colors": true,
+      "land_iou": null
+    },
+    "elf": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "Dormant runes are cut into the cold stones. Beneath the arch, darkness seals the way. They seem to be waiting for moonfire.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Elf gatekeeper",
+          "dialogue": "The elf turns her pointed ear toward you. \"These stones answer to moonfire. Light the brazier, then touch the runes.\"",
+          "art_changed": false,
+          "newly_used": [
+            "Elf gatekeeper"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Moonfire brazier",
+          "dialogue": "Blue moonfire blossoms in the cold bowl. Its steady flame casts pale light toward the arch.",
+          "art_changed": true,
+          "newly_used": [
+            "Moonfire brazier"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "At your touch, the runes drink in the moonfire and shine blue. Darkness parts to reveal an open passage; the ancient standing stones remain still.",
+          "art_changed": true,
+          "newly_used": [
+            "Rune arch"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Moonfire brazier",
+          "dialogue": "The brazier remains lit, its blue moonfire burning without smoke.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        },
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "The runes glow steadily. The passage remains open between the unmoving stones.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ]
+    }
+  },
+  "gpt-6.1-terra": {
+    "house": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog watches you from its resting spot.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Cat",
+          "dialogue": "The cat sits upright and purrs in the warm light.",
+          "art_changed": true,
+          "newly_used": [
+            "Cat"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Toy basket",
+          "dialogue": "You open the toy basket. A ball peeks out beneath the raised lid.",
+          "art_changed": true,
+          "newly_used": [
+            "Toy basket"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog stands up, eager to play with the ball.",
+          "art_changed": true,
+          "newly_used": [
+            "Dog"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Cat",
+          "dialogue": "The cat sits upright on the perch, purring.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        },
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog stands ready to play, watching the open basket.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ],
+      "cat_changes_art": true
+    },
+    "elf": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "Dormant runes mark the standing stones. The arch is silent and its passage is closed.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Elf gatekeeper",
+          "dialogue": "The elf inclines her head. 'The old stones answer moonfire. Wake the flame, and the way will open.'",
+          "art_changed": false,
+          "newly_used": [
+            "Elf gatekeeper"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Moonfire brazier",
+          "dialogue": "Blue moonfire springs to life in the bowl and burns steadily.",
+          "art_changed": true,
+          "newly_used": [
+            "Moonfire brazier"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "Moonfire awakens the runes. They glow blue as an open passage appears between the stones.",
+          "art_changed": true,
+          "newly_used": [
+            "Rune arch"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Moonfire brazier",
+          "dialogue": "Blue moonfire burns steadily in the brazier.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        },
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "The runes glow softly around the open passage.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ]
+    }
+  },
+  "gpt-6-sol": {
+    "forest": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "White bear",
+          "dialogue": "Through the closed blind, the bear is only a pale blur. Open the viewing slit for a clear view.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Trail sign",
+          "dialogue": "The weathered sign reads: Open the lookout's viewing slit for a clear view of the white bear across the stream.",
+          "art_changed": false,
+          "newly_used": [
+            "Trail sign"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Lookout blind",
+          "dialogue": "You lift the wooden shutter. The viewing slit opens onto the far bank.",
+          "art_changed": true,
+          "newly_used": [
+            "Lookout blind"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "White bear",
+          "dialogue": "Through the open slit, the white bear lifts its head and looks toward the dawn light.",
+          "art_changed": true,
+          "newly_used": [
+            "White bear"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "White bear",
+          "dialogue": "The bear keeps its head raised, its dark nose pointed toward the dawn.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ]
+    },
+    "house": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog watches you from its resting spot beside the sofa.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Cat",
+          "dialogue": "The cat sits upright and purrs on the window perch.",
+          "art_changed": true,
+          "newly_used": [
+            "Cat"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Toy basket",
+          "dialogue": "You open the toy basket. A ball is inside.",
+          "art_changed": true,
+          "newly_used": [
+            "Toy basket"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog springs up, eager to play with the ball.",
+          "art_changed": true,
+          "newly_used": [
+            "Dog"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Cat",
+          "dialogue": "The cat is sitting upright, still purring.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        },
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog stands ready to play, tail lifted.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ],
+      "cat_changes_art": true
+    },
+    "map": {
+      "uses_required_colors": true,
+      "land_iou": null
+    },
+    "elf": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "The runes are dormant. The arch waits for moonfire.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Elf gatekeeper",
+          "dialogue": "The arch answers to moonfire. Light the brazier, then touch the runes.",
+          "art_changed": false,
+          "newly_used": [
+            "Elf gatekeeper"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Moonfire brazier",
+          "dialogue": "Blue moonfire rises from the bowl and settles into a steady flame.",
+          "art_changed": true,
+          "newly_used": [
+            "Moonfire brazier"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "The runes flare blue. A dark passage opens between the standing stones.",
+          "art_changed": true,
+          "newly_used": [
+            "Rune arch"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Moonfire brazier",
+          "dialogue": "The brazier burns with steady blue moonfire.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        },
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "Glowing runes frame the open passage.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ]
+    }
+  },
+  "gpt-6-luna": {
+    "house": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog watches you from its resting spot. Open the toy basket first.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Cat",
+          "dialogue": "The cat sits upright on the sunny perch and purrs.",
+          "art_changed": true,
+          "newly_used": [
+            "Cat"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Toy basket",
+          "dialogue": "You open the toy basket. A bright ball is visible inside, and the lid stays open.",
+          "art_changed": true,
+          "newly_used": [
+            "Toy basket"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog springs up into an eager play pose, ready for the ball.",
+          "art_changed": true,
+          "newly_used": [
+            "Dog"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Cat",
+          "dialogue": "The cat remains upright on the perch, purring softly.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        },
+        {
+          "key": 3,
+          "target": "Dog",
+          "dialogue": "The dog stays on its feet, eager to play.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ],
+      "cat_changes_art": true
+    }
+  },
+  "gpt-5.6-sol": {
+    "map": {
+      "uses_required_colors": true,
+      "land_iou": null
+    },
+    "elf": {
+      "matches_object_order": true,
+      "first_action_is_blocked": true,
+      "prerequisite_changes_art": true,
+      "dependent_action_changes_art": true,
+      "repeat_actions_preserve_art_and_report_state": true,
+      "steps": [
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "The carved runes are dormant. They seem to be waiting for a particular light.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 1,
+          "target": "Elf gatekeeper",
+          "dialogue": "The elf says, \"Wake the moonfire. Its blue light is the key that stirs the arch.\"",
+          "art_changed": false,
+          "newly_used": [
+            "Elf gatekeeper"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Moonfire brazier",
+          "dialogue": "You kindle the cold bowl. Blue moonfire rises without smoke and remains steadily lit.",
+          "art_changed": true,
+          "newly_used": [
+            "Moonfire brazier"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "Moonfire washes across the arch. Its runes blaze cyan, and the sealed darkness opens into a passage.",
+          "art_changed": true,
+          "newly_used": [
+            "Rune arch"
+          ],
+          "uses_revisit_text": false
+        },
+        {
+          "key": 2,
+          "target": "Moonfire brazier",
+          "dialogue": "The moonfire brazier is lit, its quiet blue flame bathing the stones in spectral light.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        },
+        {
+          "key": 3,
+          "target": "Rune arch",
+          "dialogue": "The arch stands open. Glowing runes frame the deep blue passage while the standing stones remain unmoved.",
+          "art_changed": false,
+          "newly_used": [],
+          "uses_revisit_text": true
+        }
+      ]
+    }
+  },
+  "gpt-5.6-terra": {},
+  "gpt-5.6-luna": {}
+}

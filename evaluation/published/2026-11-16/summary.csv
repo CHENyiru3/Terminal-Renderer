@@ -1,0 +1,41 @@
+model,case,trial,order,reasoning_effort,attempts,first_status,final_status,first_seconds,total_seconds,input_tokens,cached_input_tokens,output_tokens,reasoning_output_tokens,api_equivalent_usd,subscription_credits,error
+gpt-6-luna,map,1,31,medium,1,invalid,invalid,40.061,40.061,14516,0,1643,0,0.0022731,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-5.6-terra,map,1,36,medium,1,invalid,invalid,43.728,43.728,14330,0,1305,516,0.04432,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-5.6-luna,starry-night,1,39,medium,1,invalid,invalid,46.292,46.292,12796,0,1978,191,0.0049328,,background must contain 1 to 64 shapes
+gpt-6-luna,elf,1,17,medium,1,invalid,invalid,47.231,47.231,13583,0,2015,201,0.0023658,,Rune arch art polygon must have 3 to 12 points within its drawing bounds
+gpt-5.6-luna,map,1,15,medium,1,invalid,invalid,47.34,47.34,12820,7168,2113,1411,0.00380936,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-5.6-luna,house,1,4,medium,1,invalid,invalid,47.617,47.617,12797,7168,2037,462,0.00371356,,background contains a malformed shape or unknown color
+gpt-6-luna,starry-night,1,29,medium,1,invalid,invalid,53.25,53.25,14492,0,2357,0,0.0026277,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-5.6-terra,starry-night,1,26,medium,1,invalid,invalid,55.818,55.818,14306,0,1950,136,0.052012,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-5.6-luna,forest,1,33,medium,1,invalid,invalid,56.897,56.897,12818,0,2580,516,0.0056596,,Trail sign art must be within its drawing bounds
+gpt-5.6-terra,house,1,5,medium,1,invalid,invalid,58.379,58.379,14311,0,1961,290,0.052154,,Dog art contains a malformed shape or unknown color
+gpt-6-luna,house,1,37,medium,1,valid,valid,61.24,61.24,14495,0,2771,0,0.002835,,
+gpt-6.1-terra,map,1,32,medium,1,invalid,invalid,61.721,61.721,15147,13696,2757,122,0.0159208,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-6.1-terra,house,1,24,medium,1,valid,valid,61.792,61.792,15126,9088,2813,86,0.0205574,,
+gpt-6.1-terra,elf,1,40,medium,1,valid,valid,63.947,63.947,15146,13696,2981,0,0.0170398,,
+gpt-5.6-luna,elf,1,19,medium,1,invalid,invalid,64.652,64.652,12821,0,3076,668,0.0062554,,palette must be an object with 1 to 32 named colors
+gpt-6-sol,house,1,28,medium,1,valid,valid,67.071,67.071,14678,8704,3154,745,0.0452288,,
+gpt-6.1-terra,starry-night,1,14,medium,1,invalid,invalid,67.87,67.87,15121,9088,3214,43,0.0225574,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-6-sol,starry-night,1,13,medium,1,invalid,invalid,70.784,70.784,14675,0,3338,847,0.06273,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-5.6-terra,elf,1,30,medium,1,invalid,invalid,70.817,70.817,14337,0,2366,236,0.057066,,Rune arch art polygon must have 3 to 12 points within its drawing bounds
+gpt-6.1-sol,map,1,2,medium,1,valid,valid,73.305,73.305,15207,9216,2264,163,0.0355436,,
+gpt-6-luna,forest,1,35,medium,1,invalid,invalid,79.899,79.899,14518,0,3925,0,0.0034143,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-5.6-terra,forest,1,20,medium,1,invalid,invalid,81.824,81.824,14330,0,2808,516,0.062356,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-6.1-terra,forest,1,7,medium,1,invalid,invalid,82.082,82.082,15143,0,3943,88,0.034858,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-6.1-sol,starry-night,1,3,medium,1,valid,valid,86.141,86.141,15181,13696,3218,138,0.0365196,,
+gpt-6-sol,map,1,18,medium,1,valid,valid,87.252,87.252,14693,0,4275,2318,0.072136,,
+gpt-6.1-sol,house,1,1,medium,1,valid,valid,87.993,87.993,15188,9216,3636,335,0.0492256,,
+gpt-6-astra,map,1,22,medium,1,valid,valid,100.266,100.266,15141,9088,3210,241,0.230118,,
+gpt-6.1-sol,forest,1,34,medium,1,invalid,invalid,105.013,105.013,15203,9216,4488,307,0.0577756,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-6-astra,house,1,9,medium,1,valid,valid,105.809,105.809,15124,9088,3905,128,0.264698,,
+gpt-6-astra,starry-night,1,10,medium,1,invalid,invalid,109.985,109.985,15121,9088,3804,65,0.259618,,background must contain 1 to 64 shapes
+gpt-5.6-sol,starry-night,1,12,medium,1,invalid,invalid,113.105,113.105,14308,0,2405,357,0.105332,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-6-sol,forest,1,8,medium,1,valid,valid,113.304,113.304,13759,4096,5828,1366,0.0784252,,
+gpt-5.6-sol,map,1,27,medium,1,valid,valid,113.916,113.916,14326,8192,2436,1415,0.0765328,,
+gpt-6-sol,elf,1,25,medium,1,valid,valid,114.359,114.359,14696,0,5759,1757,0.086982,,
+gpt-6.1-sol,elf,1,11,medium,1,valid,valid,115.627,115.627,15212,4992,5038,278,0.0713192,,
+gpt-6-astra,forest,1,6,medium,1,valid,valid,118.231,118.231,15141,9088,4465,88,0.292868,,
+gpt-6-astra,elf,1,16,medium,1,valid,valid,129.016,129.016,15144,9088,4511,103,0.295198,,
+gpt-5.6-sol,house,1,23,medium,1,invalid,invalid,133.129,133.129,14311,0,3588,1034,0.129004,,palette must be an object with 1 to 32 named colors
+gpt-5.6-sol,forest,1,38,medium,1,invalid,invalid,145.108,145.108,14330,0,4211,421,0.14154,,background polygon must have 3 to 12 points within its drawing bounds
+gpt-5.6-sol,elf,1,21,medium,1,valid,valid,146.424,146.424,14329,0,4299,327,0.143296,,
