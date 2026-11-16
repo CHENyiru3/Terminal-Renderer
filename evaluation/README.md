@@ -26,6 +26,16 @@ python3.11 -m evaluation.run
 
 The runner makes up to four calls in parallel. Set `--jobs N` to change the worker count, or `--jobs 1` to measure latency with one active call. Use repeated `--model` and `--case` flags for a subset. Use `--trials N` for repeats or `--repair-invalid` for a separate run that permits one repair per invalid response. Results default to a new timestamped directory under `evaluation/results/`. Use `--out` to select a different new directory. The runner writes `summary.csv` incrementally and writes per-model, per-case validity counts and timing statistics to `aggregates.json` at the end. `batch.json` records elapsed wall time for the suite and the worker count. Each attempt has its own request, raw response when available, CLI logs, metrics, and rendered frames. Usage and costs are blank when unavailable. Start it in a terminal where `codex exec` works with your ChatGPT login.
 
+## Replay a result
+
+In `summary.csv`, look for rows with `final_status` set to `valid`. Each valid attempt has both a `parsed.json` and a `00-initial.png`. From the repository root, open the saved scene JSON in a truecolor terminal:
+
+```sh
+python3.11 demo.py --scene evaluation/results/<run>/<model>/<case>/trial-01/attempt-1/parsed.json
+```
+
+Use the attempt number recorded by the run. Press the scene's number keys to interact and **Q** to quit. The map and painting open as static frames.
+
 ## Comparison protocol
 
 1. The runner's default lineup mirrors the account picker supplied for this evaluation: GPT-6.1 Sol, GPT-6 Astra, GPT-6.1 Terra, GPT-6 Sol, GPT-6 Luna, GPT-5.6 Sol, GPT-5.6 Terra, and GPT-5.6 Luna. Record the date and exact model IDs. For future catalog changes, query `model/list` through the signed-in Codex App Server. Record models that do not accept `medium` and models that fail to start as coverage exceptions. The runner requests each specific model and records model IDs exposed in the logs. [Codex model discovery](https://developers.openai.com/codex/app-server#list-models-modellist)

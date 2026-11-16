@@ -190,7 +190,7 @@ def main() -> int:
         elif args.scene is not None:
             from scene import parse_scene
 
-            scene = parse_scene(json.loads(args.scene.read_text(encoding="utf-8")))
+            scene = parse_scene(json.loads(args.scene.read_text(encoding="utf-8")), allow_static=True)
         else:
             scene = tavern()
         play(scene)
