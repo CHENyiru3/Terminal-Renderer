@@ -15,23 +15,23 @@ How reliably can GPT models turn a text prompt into a playable terminal scene? H
 From the repository root, check `codex login status`, then run one forest trial per model:
 
 ```sh
-python3.11 -m evaluation.run --case forest --trials 1
+python3.11 -m evaluation.run --case forest
 ```
 
-Run the full suite across eight models, five cases, and three trials per case:
+Run the full suite once for each combination of eight models and five cases (40 scheduled calls):
 
 ```sh
 python3.11 -m evaluation.run
 ```
 
-Use repeated `--model` and `--case` flags for a subset. Results default to a new timestamped directory under `evaluation/results/`; `--out` selects a different new directory. The runner writes `summary.csv` incrementally and writes per-model, per-case validity counts and timing statistics to `aggregates.json` at the end. Each attempt has its own request, raw response when available, CLI logs, metrics, and rendered frames. Usage and costs are blank when unavailable. Start it in a terminal where `codex exec` works with your ChatGPT login.
+The runner makes up to four calls in parallel. Set `--jobs N` to change the worker count, or `--jobs 1` to measure latency with one active call. Use repeated `--model` and `--case` flags for a subset. Use `--trials N` for repeats or `--repair-invalid` for a separate run that permits one repair per invalid response. Results default to a new timestamped directory under `evaluation/results/`. Use `--out` to select a different new directory. The runner writes `summary.csv` incrementally and writes per-model, per-case validity counts and timing statistics to `aggregates.json` at the end. `batch.json` records elapsed wall time for the suite and the worker count. Each attempt has its own request, raw response when available, CLI logs, metrics, and rendered frames. Usage and costs are blank when unavailable. Start it in a terminal where `codex exec` works with your ChatGPT login.
 
 ## Comparison protocol
 
 1. The runner's default lineup mirrors the account picker supplied for this evaluation: GPT-6.1 Sol, GPT-6 Astra, GPT-6.1 Terra, GPT-6 Sol, GPT-6 Luna, GPT-5.6 Sol, GPT-5.6 Terra, and GPT-5.6 Luna. Record the date and exact model IDs. For future catalog changes, query `model/list` through the signed-in Codex App Server. Record models that do not accept `medium` and models that fail to start as coverage exceptions. The runner requests each specific model and records model IDs exposed in the logs. [Codex model discovery](https://developers.openai.com/codex/app-server#list-models-modellist)
-2. Set Codex reasoning explicitly with `-c 'model_reasoning_effort="medium"'`. Use the CLI's default speed with user configuration disabled, fresh sessions, the same renderer revision and shared format instructions, and the same local machine. Keep the tasks text-only and use the map data and painting image during scoring. Run one request at a time. Record the selected model, requested effort, CLI version, renderer revision, speed setting, and prompt version with each result. [Codex config reference](https://developers.openai.com/codex/config-reference)
-3. Start with the forest prompt across all eight models to verify the lineup. Then use all five cases on one accessible model to check the format and scoring. If the prompts or harness change, keep those pilot outputs separate. Freeze both for the scored run and collect three trials per model per case, with a fixed-seed shuffled order for each repeat. Record that seed. Three trials provide a descriptive view of variability.
-4. Preserve and score the first attempt. If JSON parsing or scene validation fails, allow one repair using the same model and effort with the exact validator error. Keep both attempts and report first-pass and post-repair validity. Attempts that produce valid but weak art or fail a gameplay check remain in the results as produced.
+2. Set Codex reasoning explicitly with `-c 'model_reasoning_effort="medium"'`. Use the CLI's default speed with user configuration disabled, fresh sessions, the same renderer revision and shared format instructions, and the same local machine. Keep the tasks text-only and use the map data and painting image during scoring. Use the same worker count for timing comparisons. Record the model, requested effort, CLI version, renderer revision, speed setting, worker count, and prompt version. [Codex config reference](https://developers.openai.com/codex/config-reference)
+3. Freeze the prompts and harness, then collect one trial for each model and case using a fixed-seed shuffled submission order. Record the seed and worker count. Concurrent trials may finish in a different order. The resulting measurements describe the single observed response for each combination.
+4. Preserve and score the first response as produced, including invalid JSON, scene validation failures, weak art, and failed gameplay checks. The scored run uses one model call per trial. When explicitly testing repairs, keep the original and repaired responses and report first-pass and post-repair validity.
 5. Interpret the results as performance through the Codex CLI and this renderer. The current scene generator requires at least one object and supports rectangles and polygons of up to 12 vertices. For the two static cases, the benchmark runner accepts `objects: []` and passes the same RGB framebuffer to the renderer. Keep the same 144 × 80 canvas and 64-background-shape cap across the suite. A fixed geometry budget makes the comparisons reproducible and constrains the maximum fidelity of the map and painting.
 
 ## Checks and quality scoring
@@ -47,7 +47,7 @@ For subjective criteria, use a 0–4 scale with model IDs hidden during review. 
 | Measure | What to record |
 | --- | --- |
 | Tokens | Input, cached input, output, and reasoning output from each reported Codex `turn.completed` usage event. Use blank values when telemetry is missing. [Codex JSONL output](https://developers.openai.com/codex/noninteractive) |
-| Time | Wall-clock seconds from launching generation to the first validation result. If a repair is attempted, also record total time through the final validation result. Time rendering separately. Report the median and range per model and case, with the valid sample count. |
+| Time | Wall-clock seconds from launching generation to the first validation result. If a repair is attempted, also record total time through the final validation result. Time rendering separately. Report the observed time for each model and case. Per-attempt timing starts when a worker runs the attempt and includes any provider-side queuing. The batch timer also includes time spent waiting for a worker. If repeats are enabled, include the median, range, and valid sample count. |
 | Subscription usage | Per-run credits when exposed by Codex. An accountwide allowance change can be recorded at batch level when no other workload shares the allowance during the batch. Use unavailable for individual runs when there is no per-run readout. [Codex subscription usage](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan) |
 | API-equivalent cost | USD estimate using the dated standard API rates for the precise model in [api-rates.json](api-rates.json). Apply cached rates only to reported cache hits. Keep the estimate blank when the model's matching rates or necessary token categories are unavailable. [OpenAI API pricing](https://developers.openai.com/api/docs/pricing) |
 

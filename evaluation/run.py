@@ -1,6 +1,7 @@
 """Run the terminal scene benchmark through the signed-in Codex CLI."""
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import csv
 from datetime import datetime, timezone
 import hashlib
@@ -231,7 +232,7 @@ def run_trial(root, model, case, trial, prompt, running_order, args, rates, land
     directory.mkdir(parents=True)
     first, raw = run_attempt(directory / "attempt-1", prompt, model, case, args.timeout, rates, land_reference)
     attempts = [first]
-    if first["status"] == "invalid" and raw.strip():
+    if args.repair_invalid and first["status"] == "invalid" and raw.strip():
         retry_prompt = (
             f"{prompt}\n\nYour previous response follows. Return a complete corrected scene JSON object.\n"
             f"Validator error: {first['error']}\n\n{raw}"
@@ -263,14 +264,18 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", action="append", choices=MODELS, help="repeat to test a subset")
     parser.add_argument("--case", action="append", choices=CASES, help="repeat to test a subset")
-    parser.add_argument("--trials", type=int, default=3)
+    parser.add_argument("--trials", type=int, default=1, help="trials per model and case (default: 1)")
+    parser.add_argument(
+        "--repair-invalid", action="store_true", help="make one extra model call to repair an invalid response",
+    )
+    parser.add_argument("--jobs", type=int, default=4, help="maximum concurrent model calls (default: 4)")
     parser.add_argument("--seed", type=int, default=20261116)
     parser.add_argument("--timeout", type=int, default=180, help="seconds per attempt")
     parser.add_argument("--out", type=Path, help="new results directory")
     parser.add_argument("--land-reference", type=Path, help="optional 144 x 72 row-major byte mask (0 water, 1 land)")
     args = parser.parse_args()
-    if args.trials < 1 or args.timeout < 1:
-        parser.error("--trials and --timeout must be positive")
+    if min(args.trials, args.jobs, args.timeout) < 1:
+        parser.error("--trials, --jobs, and --timeout must be positive")
     if not shutil.which("codex"):
         parser.error("codex is missing from PATH")
     models = list(dict.fromkeys(args.model or MODELS))
@@ -293,33 +298,55 @@ def main():
     write_json(root / "run.json", {
         "utc_start": started.isoformat(), "cli_version": cli.stdout.strip(),
         "models": models, "cases": cases, "trials": args.trials, "seed": args.seed,
+        "jobs": args.jobs,
         "reasoning_effort": "medium", "service_tier": "CLI default with user config disabled",
-        "timeout_seconds": args.timeout, "api_rates": catalog,
+        "repair_invalid": args.repair_invalid, "timeout_seconds": args.timeout, "api_rates": catalog,
         "source_hashes": {str(path.relative_to(HERE.parent)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sources},
     })
     if land_reference is not None:
         (root / "land-reference.bin").write_bytes(land_reference)
 
     randomizer = random.Random(args.seed)
-    rows = []
+    schedule = []
     for trial in range(1, args.trials + 1):
-        schedule = [(model, case) for model in models for case in cases]
-        randomizer.shuffle(schedule)
-        for model, case in schedule:
-            print(f"Trial {trial} · {model} · {case}", flush=True)
-            row = run_trial(
-                root, model, case, trial, prompts[case], len(rows) + 1, args,
-                catalog["models"].get(model), land_reference,
-            )
-            rows.append(row)
-            csv_path = root / "summary.csv"
-            with csv_path.open("a", newline="", encoding="utf-8") as summary:
-                writer = csv.DictWriter(summary, fieldnames=row.keys())
-                if len(rows) == 1:
-                    writer.writeheader()
-                writer.writerow(row)
-            print(f"  {row['final_status']} in {row['total_seconds']:.3f}s", flush=True)
+        repeat = [(model, case, trial) for model in models for case in cases]
+        randomizer.shuffle(repeat)
+        schedule.extend(repeat)
 
+    def execute(item):
+        order, (model, case, trial) = item
+        print(f"Trial {trial} · {model} · {case}", flush=True)
+        return run_trial(
+            root, model, case, trial, prompts[case], order, args,
+            catalog["models"].get(model), land_reference,
+        )
+
+    rows = []
+    started_batch = perf_counter()
+    with ThreadPoolExecutor(max_workers=args.jobs) as executor:
+        futures = [executor.submit(execute, item) for item in enumerate(schedule, 1)]
+        try:
+            with (root / "summary.csv").open("w", newline="", encoding="utf-8") as summary:
+                for completed in as_completed(futures):
+                    row = completed.result()
+                    writer = csv.DictWriter(summary, fieldnames=row.keys())
+                    if not rows:
+                        writer.writeheader()
+                    writer.writerow(row)
+                    summary.flush()
+                    rows.append(row)
+                    print(
+                        f"  {row['model']} · {row['case']} · "
+                        f"{row['final_status']} in {row['total_seconds']:.3f}s",
+                        flush=True,
+                    )
+        except KeyboardInterrupt:
+            for future in futures:
+                future.cancel()
+            print(f"Stopped queuing trials. Results collected so far are in {root}", flush=True)
+            return 130
+
+    batch_seconds = round(perf_counter() - started_batch, 3)
     aggregates = []
     for model in models:
         for case in cases:
@@ -333,6 +360,7 @@ def main():
             })
     write_json(root / "aggregates.json", aggregates)
     valid = sum(row["final_status"] == "valid" for row in rows)
+    write_json(root / "batch.json", {"wall_seconds": batch_seconds, "jobs": args.jobs, "valid_trials": valid})
     print(f"Saved {len(rows)} trials ({valid} valid) to {root}")
     return 0 if valid == len(rows) else 1
 
