@@ -44,6 +44,10 @@ New scenes use `"version": 2`. Background coordinates and object bounds are rela
 
 An object can name a `requires` prerequisite and describe the locked state in `blocked`. On success it shows `text`. Subsequent presses show `revisit` when provided, so a one-time action can describe the resulting state. Use printable ASCII for in-game text. Saved version 1 scenes still load with their original absolute art coordinates and overlay format.
 
+## Evaluation
+
+See the [benchmark protocol and prompts](evaluation/README.md) for the model comparison.
+
 ## Renderer API
 
 ```python
